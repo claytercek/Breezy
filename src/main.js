@@ -1,31 +1,28 @@
+import SceneManager from './SceneManager';
 
-import * as THREE from 'three';
+const canvas = document.getElementById('canvas');
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000);
+const sceneManager = new SceneManager(canvas);
 
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+bindEventListeners();
+render();
 
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({color: 0x00ff00});
-const cube = new THREE.Mesh(geometry, material);
-scene.add(cube);
+function bindEventListeners() {
+  window.onresize = resizeCanvas;
+  resizeCanvas();
+}
 
-camera.position.z = 5;
+function resizeCanvas() {
+  canvas.style.width = '100%';
+  canvas.style.height= '100%';
 
-const animate = function() {
-  requestAnimationFrame(animate);
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
 
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
+  sceneManager.onWindowResize();
+}
 
-  renderer.render(scene, camera);
-};
-
-animate();
+function render() {
+  requestAnimationFrame(render);
+  sceneManager.update();
+}
