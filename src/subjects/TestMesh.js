@@ -2,9 +2,13 @@ import * as THREE from 'three';
 
 function SceneSubject(scene) {
   const radius = 2;
-  const mesh = new THREE.Mesh(new THREE.IcosahedronBufferGeometry(radius, 2), new THREE.MeshStandardMaterial({flatShading: true}));
+  const mesh = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(radius, 6),
+      new THREE.MeshStandardMaterial());
 
-  mesh.position.set(0, 0, -20);
+  mesh.position.set(0, 0, 0);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
 
   scene.add(mesh);
 

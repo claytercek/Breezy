@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import GeneralLights from './subjects/GeneralLights';
 import TestMesh from './subjects/TestMesh';
+import Terrain from './subjects/Terrain';
+import {OrbitControls} from './utils/OrbitControls';
 
 function SceneManager(canvas) {
   const clock = new THREE.Clock();
@@ -14,6 +16,8 @@ function SceneManager(canvas) {
   const renderer = buildRender(screenDimensions);
   const camera = buildCamera(screenDimensions);
   const sceneSubjects = createSceneSubjects(scene);
+
+  const controls = new OrbitControls( camera, renderer.domElement );
 
   function buildScene() {
     const scene = new THREE.Scene();
@@ -35,6 +39,7 @@ function SceneManager(canvas) {
 
     renderer.gammaInput = true;
     renderer.gammaOutput = true;
+    renderer.shadowMap.enabled = true;
 
     return renderer;
   }
@@ -43,12 +48,15 @@ function SceneManager(canvas) {
     const aspectRatio = width / height;
     const fieldOfView = 60;
     const nearPlane = 1;
-    const farPlane = 100;
+    const farPlane = 1000;
     const camera = new THREE.PerspectiveCamera(
         fieldOfView,
         aspectRatio,
         nearPlane,
         farPlane);
+
+    camera.position.set(0, 20, 20);
+    camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     return camera;
   }
@@ -57,6 +65,7 @@ function SceneManager(canvas) {
     const sceneSubjects = [
       new GeneralLights(scene),
       new TestMesh(scene),
+      new Terrain(scene),
     ];
 
     return sceneSubjects;
@@ -69,6 +78,7 @@ function SceneManager(canvas) {
       sceneSubjects[i].update(elapsedTime);
     }
 
+    controls.update();
     renderer.render(scene, camera);
   };
 

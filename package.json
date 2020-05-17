@@ -9,6 +9,7 @@
     "dev": "rollup -mw --config"
   },
   "dependencies": {
+    "simplex-noise": "^2.4.0",
     "three": "^0.116.1"
   },
   "devDependencies": {
