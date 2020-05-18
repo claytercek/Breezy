@@ -6,6 +6,7 @@ import serve from "rollup-plugin-serve";
 import livereload from "rollup-plugin-livereload";
 import { eslint } from 'rollup-plugin-eslint';
 import copy from 'rollup-plugin-copy'
+import glslify from 'rollup-plugin-glslify';
 
 const dev = process.env.ROLLUP_WATCH;
 const mode = dev ? "development" : "production";
@@ -17,6 +18,7 @@ export default {
     format: 'iife'
   },
   plugins: [
+    glslify(),
     eslint({
       fix: true
     }),

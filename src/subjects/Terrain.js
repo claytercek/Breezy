@@ -8,7 +8,7 @@ function Terrain(scene) {
       new THREE.MeshStandardMaterial({color: 0x3c3951}));
 
 
-  const peak = 5;
+  const peak = 2;
   const smoothing = 80;
   const vertices = mesh.geometry.attributes.position.array;
 
@@ -22,7 +22,7 @@ function Terrain(scene) {
   mesh.geometry.attributes.position.needsUpdate = true;
   mesh.geometry.computeVertexNormals();
 
-  mesh.rotation.x = -Math.PI / 2.1;
+  mesh.rotation.x = -Math.PI / 2.3;
 
   mesh.castShadow = true;
   mesh.receiveShadow = true;

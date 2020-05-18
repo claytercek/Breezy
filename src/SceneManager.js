@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import GeneralLights from './subjects/GeneralLights';
 import TestMesh from './subjects/TestMesh';
 import Terrain from './subjects/Terrain';
+import Water from './subjects/Water';
 import {OrbitControls} from './utils/OrbitControls';
 
 function SceneManager(canvas) {
@@ -66,6 +67,7 @@ function SceneManager(canvas) {
       new GeneralLights(scene),
       new TestMesh(scene),
       new Terrain(scene),
+      new Water(scene),
     ];
 
     return sceneSubjects;
