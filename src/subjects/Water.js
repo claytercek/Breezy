@@ -3,17 +3,30 @@ import frag from '../shaders/Water.frag';
 import vert from '../shaders/Water.vert';
 
 
-function Water(scene) {
+function Water(scene, camera) {
+  const n = camera.near;
+  const f = camera.far;
+  const cameraParams = new THREE.Vector4(
+      1/f,
+      f,
+      (1-f / n) / 2,
+      (1 + f / n) / 2,
+  );
+
   const material = new THREE.ShaderMaterial( {
     uniforms: {
-      resolution: {value: new THREE.Vector2()},
+      tDepth: {value: null},
+      cameraParams: new THREE.Uniform( cameraParams ),
+      screenSize: new THREE.Uniform([0, 0]),
     },
     vertexShader: vert,
     fragmentShader: frag,
-  } );
+    transparent: true,
+    depthWrite: false,
+  });
 
   const mesh = new THREE.Mesh(
-      new THREE.BoxBufferGeometry(200, 24, 200, 1, 1, 1), material);
+      new THREE.BoxBufferGeometry(200, 24, 200, 0, 0, 0), material);
 
   mesh.position.set(0, -12, 0);
   mesh.castShadow = false;
@@ -21,7 +34,11 @@ function Water(scene) {
 
   scene.add(mesh);
 
-  this.update = function(time) {
+  this.update = function(time, target) {
+    material.uniforms.tDepth.value = target.depthTexture;
+    material.uniforms.screenSize = new THREE.Uniform(
+        [target.width, target.height]
+    );
   };
 }
 
