@@ -30,13 +30,13 @@ void main() {
   float screenDepth = getLinearScreenDepth();
 
 
-  vec4 color = vec4(0, 0.85, 1.0, 0.5);
+  vec4 color = vec4(0.2, 0.95, 1.0, 0.5);
 
   // vec4 color = vec4(vec3(screenDepth / cameraParams.y), 1);
   if (screenDepth - worldDepth < 8.0) {
     color = vec4(1.0);
   } else if (screenDepth - worldDepth < 9.0) {
-    color = vec4(0.23, 0.85, 1.0, 0.8);
+    color = vec4(0.33, 1.0, 1.0, 0.8);
   }
 
 

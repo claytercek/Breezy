@@ -3,9 +3,18 @@ import 'simplex-noise';
 
 
 function Terrain(scene) {
+  const texture = new THREE.TextureLoader().load( '/images/cartoon-sand.png' );
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set( 4, 4 );
+
   const mesh = new THREE.Mesh(
       new THREE.PlaneBufferGeometry(200, 200, 64, 64),
-      new THREE.MeshStandardMaterial({color: 0x3c3951}));
+      new THREE.MeshStandardMaterial({
+        map: texture,
+        roughness: 1,
+
+      }));
 
 
   const peak = 2;

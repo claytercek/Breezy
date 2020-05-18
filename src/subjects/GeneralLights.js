@@ -2,8 +2,8 @@ import * as THREE from 'three';
 
 function GeneralLights(scene) {
   const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.6 );
-  hemiLight.color.setHSL( 0.6, 1, 0.6 );
-  hemiLight.groundColor.setHSL( 0.095, 1, 0.75 );
+  hemiLight.color.setHSL( 0.6, 0.85, 0.6 );
+  hemiLight.groundColor.setHSL( 0.095, 0.85, 0.75 );
   hemiLight.position.set( 0, 50, 0 );
   scene.add( hemiLight );
 
@@ -11,7 +11,7 @@ function GeneralLights(scene) {
   scene.add( hemiLightHelper );
 
   const dirLight = new THREE.DirectionalLight( 0xffffff, 1 );
-  dirLight.color.setHSL( 0.1, 1, 0.95 );
+  dirLight.color.setHSL( 0.1, 1, 0.85 );
   dirLight.position.set( - 1, 1.75, 1 );
   dirLight.position.multiplyScalar( 30 );
   scene.add( dirLight );
