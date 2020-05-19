@@ -26,11 +26,12 @@ function Water(scene, camera) {
   });
 
   const mesh = new THREE.Mesh(
-      new THREE.BoxBufferGeometry(200, 24, 200, 0, 0, 0), material);
+      new THREE.PlaneBufferGeometry(200, 200, 0, 0), material);
 
-  mesh.position.set(0, -12, 0);
-  mesh.castShadow = false;
-  mesh.receiveShadow = false;
+  mesh.rotateX(Math.PI / -2);
+  mesh.position.set(0, 0, 0);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
 
   scene.add(mesh);
 

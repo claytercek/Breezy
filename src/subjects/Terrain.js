@@ -13,7 +13,6 @@ function Terrain(scene) {
       new THREE.MeshStandardMaterial({
         map: texture,
         roughness: 1,
-
       }));
 
 
