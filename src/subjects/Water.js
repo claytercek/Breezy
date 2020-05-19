@@ -18,6 +18,9 @@ function Water(scene, camera) {
       tDepth: {value: null},
       cameraParams: new THREE.Uniform( cameraParams ),
       screenSize: new THREE.Uniform([0, 0]),
+      uTime: {
+        value: 0.0,
+      },
     },
     vertexShader: vert,
     fragmentShader: frag,
@@ -26,7 +29,7 @@ function Water(scene, camera) {
   });
 
   const mesh = new THREE.Mesh(
-      new THREE.PlaneBufferGeometry(200, 200, 0, 0), material);
+      new THREE.PlaneBufferGeometry(200, 200, 64, 64), material);
 
   mesh.rotateX(Math.PI / -2);
   mesh.position.set(0, 0, 0);
@@ -40,6 +43,7 @@ function Water(scene, camera) {
     material.uniforms.screenSize = new THREE.Uniform(
         [target.width, target.height]
     );
+    material.uniforms.uTime.value = time;
   };
 }
 
