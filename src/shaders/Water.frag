@@ -30,8 +30,8 @@ void main() {
   float worldDepth = getLinearDepth(WorldPosition.xyz);
   float screenDepth = getLinearScreenDepth();
 
-  float diff =  worldDepth - screenDepth;
-  vec4 color = vec4(0.2, 0.95, 1.0, 0.5);
+  float diff =  (worldDepth - screenDepth);
+  vec4 color = vec4(0.2, 0.9 - diff / 300., 1.0, 0.5 + diff / 150.);
   // vec4 color = vec4(vec3(diff), 1.0);
   if (diff < 0.6) {
     color = vec4(1);
