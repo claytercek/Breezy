@@ -13,20 +13,34 @@ function Terrain(scene) {
 
   const mesh = new THREE.Mesh(
       new THREE.PlaneBufferGeometry(200, 200, 64, 64),
-      new THREE.ShaderMaterial({
-        vertexShader: vert,
-        fragmentShader: frag,
-        lights: true,
-        uniforms: THREE.UniformsUtils.merge([
-          {
-            texture: {type: 't', value: null},
-          },
-          THREE.UniformsLib.lights,
-          THREE.UniformsLib.fog,
-        ]),
-      }));
+      // new THREE.ShaderMaterial({
+      //   vertexShader: vert,
+      //   fragmentShader: frag,
+      //   lights: true,
+      //   uniforms: THREE.UniformsUtils.merge([
+      //     {
+      //       texture: {type: 't', value: null},
+      //     },
+      //     THREE.ShaderLib.standard.uniforms,
+      //   ]),
+      // })
+      [
+        new THREE.ShaderMaterial({
+          transparent: true,
+          vertexShader: vert,
+          fragmentShader: frag,
+          uniforms: THREE.ShaderLib.phong.uniforms,
+        }),
+        new THREE.MeshPhongMaterial({
+          map: texture,
+          shininess: 0,
+        }),
+      ]
+  );
 
-  mesh.material.uniforms.texture.value = texture;
+  mesh.geometry.clearGroups();
+  mesh.geometry.addGroup( 0, Infinity, 0 );
+  mesh.geometry.addGroup( 0, Infinity, 1 );
 
 
   const peak = 2;
