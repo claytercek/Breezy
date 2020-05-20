@@ -43,9 +43,10 @@ function SceneManager(canvas) {
     renderer.setPixelRatio(DPR);
     renderer.setSize(width, height);
 
-    renderer.gammaInput = true;
-    renderer.gammaOutput = true;
+    // renderer.gammaInput = true;
+    // renderer.gammaOutput = true;
     renderer.shadowMap.enabled = true;
+    renderer.autoClear = false;
 
     return renderer;
   }
@@ -128,6 +129,8 @@ function SceneManager(canvas) {
 
     controls.update();
 
+    renderer.clear();
+
     // render scene to target
     renderer.setRenderTarget( target );
     renderer.render(scene, camera);
@@ -138,6 +141,7 @@ function SceneManager(canvas) {
 
     renderer.setRenderTarget( null );
     renderer.render( postScene, postCamera );
+    renderer.clearDepth();
   };
 
   this.onWindowResize = function() {

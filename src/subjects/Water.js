@@ -16,6 +16,7 @@ function Water(scene, camera) {
   const material = new THREE.ShaderMaterial( {
     uniforms: {
       tDepth: {value: null},
+      tEnv: {value: null},
       cameraParams: new THREE.Uniform( cameraParams ),
       screenSize: new THREE.Uniform([0, 0]),
       uTime: {
@@ -40,6 +41,7 @@ function Water(scene, camera) {
 
   this.update = function(time, target) {
     material.uniforms.tDepth.value = target.depthTexture;
+    material.uniforms.tEnv.value = target.texture;
     material.uniforms.screenSize = new THREE.Uniform(
         [target.width, target.height]
     );
