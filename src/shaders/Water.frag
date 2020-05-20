@@ -2,7 +2,6 @@
 #include <packing>
 
 varying vec4 WorldPosition;
-varying float test;
 
 uniform vec2 screenSize;
 uniform vec4 cameraParams;

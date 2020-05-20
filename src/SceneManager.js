@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import GeneralLights from './subjects/GeneralLights';
-import TestMesh from './subjects/TestMesh';
+import Rock from './subjects/Rock';
 import Terrain from './subjects/Terrain';
 import Water from './subjects/Water';
 import {OrbitControls} from './utils/OrbitControls';
@@ -71,7 +71,7 @@ function SceneManager(canvas) {
   function createSceneSubjects(scene, camera) {
     const sceneSubjects = [
       new GeneralLights(scene),
-      new TestMesh(scene),
+      new Rock(scene),
       new Terrain(scene),
       new Water(scene, camera),
     ];

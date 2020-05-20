@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import 'simplex-noise';
+import vert from '../shaders/Sand.vert';
+import frag from '../shaders/Sand.frag';
 
 
 function Terrain(scene) {
@@ -8,12 +10,23 @@ function Terrain(scene) {
   texture.wrapT = THREE.RepeatWrapping;
   texture.repeat.set( 4, 4 );
 
+
   const mesh = new THREE.Mesh(
       new THREE.PlaneBufferGeometry(200, 200, 64, 64),
-      new THREE.MeshStandardMaterial({
-        map: texture,
-        roughness: 1,
+      new THREE.ShaderMaterial({
+        vertexShader: vert,
+        fragmentShader: frag,
+        lights: true,
+        uniforms: THREE.UniformsUtils.merge([
+          {
+            texture: {type: 't', value: null},
+          },
+          THREE.UniformsLib.lights,
+          THREE.UniformsLib.fog,
+        ]),
       }));
+
+  mesh.material.uniforms.texture.value = texture;
 
 
   const peak = 2;
@@ -36,6 +49,7 @@ function Terrain(scene) {
   mesh.receiveShadow = true;
 
   scene.add(mesh);
+
 
   this.update = function(time) {
   };
