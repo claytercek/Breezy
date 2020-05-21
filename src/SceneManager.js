@@ -55,7 +55,7 @@ function SceneManager(canvas) {
 
   function buildCamera({width, height}) {
     const aspectRatio = width / height;
-    const fieldOfView = 40;
+    const fieldOfView = 35;
     const nearPlane = 0.3;
     const farPlane = 400;
     const camera = new THREE.PerspectiveCamera(
@@ -72,9 +72,6 @@ function SceneManager(canvas) {
   }
 
   function createSceneSubjects(scene, camera) {
-    let rockSettings = [
-      
-    ]
     const sceneSubjects = [
       new Terrain(scene),
       new GeneralLights(scene),

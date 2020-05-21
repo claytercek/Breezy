@@ -40,13 +40,13 @@ void main() {
   uv += (viewMatrix * vec4(0.0, 0.0, wave / 100., 0.0)).xy * diff / 20.;
   vec4 color = texture2D(tEnv, uv);
 
-  vec4 waterColor = vec4(0.2, 0.9 - diff / 200., 1.0, 1.);
+  vec4 waterColor = vec4(0.2, 0.9 - diff / 50., 1.0, 1.);
   color = mix(color, waterColor, vec4(0.5 + diff / 200.));
 
   if (diff < 0.4) {
     color = vec4(1);
   } else if (diff < 0.7) {
-    color = vec4(0.7, 0.9, 1.0, 0.75);
+    color = vec4(0.7, 0.95, 1.0, 0.75);
   }
 
 
