@@ -43,11 +43,11 @@ function Terrain(scene) {
   mesh.geometry.addGroup( 0, Infinity, 1 );
 
 
-  const peak = 2;
-  const smoothing = 80;
+  const peak = 1;
+  const smoothing = 40;
   const vertices = mesh.geometry.attributes.position.array;
 
-  const simplex = new SimplexNoise();
+  const simplex = new SimplexNoise('2');
 
   for (let i = 0; i <= vertices.length; i += 3) {
     vertices[i+2] = peak * simplex.noise2D(
