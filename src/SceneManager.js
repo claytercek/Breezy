@@ -18,6 +18,8 @@ function SceneManager(canvas) {
   const terrainDimensions = [200, 200];
 
   const scene = buildScene();
+  const bufferScene = buildScene();
+  bufferScene.background = new THREE.Color('#000');
   const renderer = buildRender(screenDimensions);
   const camera = buildCamera(screenDimensions);
   const sceneSubjects = createSceneSubjects(scene, camera);
@@ -28,7 +30,7 @@ function SceneManager(canvas) {
 
   function buildScene() {
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#000');
+    // scene.background = new THREE.Color('#000');
 
     return scene;
   }
@@ -73,10 +75,10 @@ function SceneManager(canvas) {
 
   function createSceneSubjects(scene, camera) {
     const sceneSubjects = [
-      new Terrain(scene),
-      new GeneralLights(scene),
+      new Terrain(bufferScene),
+      new GeneralLights(bufferScene),
       new Water(scene, camera),
-      new Rock(scene),
+      new Rock(bufferScene),
     ];
 
     return sceneSubjects;
@@ -128,22 +130,19 @@ function SceneManager(canvas) {
       sceneSubjects[i].update(elapsedTime, target);
     }
 
-
     controls.update();
 
     renderer.clear();
 
-    // render scene to target
+    // render buffer scene for water depth texture
     renderer.setRenderTarget( target );
-    renderer.render(scene, camera);
-
-    // render post fx
-    postMaterial.uniforms.tDiffuse.value = target.texture;
-    postMaterial.uniforms.tDepth.value = target.depthTexture;
+    renderer.render(bufferScene, camera);
 
     renderer.setRenderTarget( null );
-    renderer.render( postScene, postCamera );
-    renderer.clearDepth();
+
+    // render buffer scene and then render water on top
+    renderer.render( bufferScene, camera );
+    renderer.render( scene, camera );
   };
 
   this.onWindowResize = function() {
