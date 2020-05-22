@@ -4,7 +4,7 @@ import vert from '../shaders/Sand.vert';
 import frag from '../shaders/Sand.frag';
 
 
-function Terrain(scene) {
+function Terrain(scene, terrainDimensions) {
   const texture = new THREE.TextureLoader().load( '/images/cartoon-sand.png' );
   texture.wrapS = THREE.RepeatWrapping;
   texture.wrapT = THREE.RepeatWrapping;
@@ -12,18 +12,7 @@ function Terrain(scene) {
 
 
   const mesh = new THREE.Mesh(
-      new THREE.PlaneBufferGeometry(200, 200, 64, 64),
-      // new THREE.ShaderMaterial({
-      //   vertexShader: vert,
-      //   fragmentShader: frag,
-      //   lights: true,
-      //   uniforms: THREE.UniformsUtils.merge([
-      //     {
-      //       texture: {type: 't', value: null},
-      //     },
-      //     THREE.ShaderLib.standard.uniforms,
-      //   ]),
-      // })
+      new THREE.PlaneBufferGeometry(terrainDimensions[0], terrainDimensions[1], 64, 64),
       [
         new THREE.ShaderMaterial({
           transparent: true,
@@ -44,7 +33,7 @@ function Terrain(scene) {
 
 
   const peak = 1;
-  const smoothing = 40;
+  const smoothing = 8000 / terrainDimensions[1];
   const vertices = mesh.geometry.attributes.position.array;
 
   const simplex = new SimplexNoise('2');

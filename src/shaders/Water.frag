@@ -4,14 +4,15 @@ varying vec4 WorldPosition;
 varying vec2 vUv;
 
 uniform vec2 screenSize;
-uniform vec4 cameraParams;
 uniform sampler2D tDepth;
 uniform sampler2D tEnv;
 uniform float uTime;
+uniform float cameraNear;
+uniform float cameraFar;
 
 
 float linearizeDepth(float z) {
-  float viewZ = perspectiveDepthToViewZ( z, 0.3, 400. );
+  float viewZ = perspectiveDepthToViewZ( z, cameraNear, cameraFar );
   return viewZ;
 }
 
@@ -51,7 +52,6 @@ void main() {
   } else if (diff < 0.7) {
     color = vec4(0.7, 0.95, 1.0, 0.75);
   }
-
 
   gl_FragColor = color;
 }

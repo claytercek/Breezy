@@ -12,6 +12,7 @@ function SceneManager(canvas) {
     width: canvas.width,
     height: canvas.height,
   };
+  const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
 
   const terrainDimensions = [200, 200];
 
@@ -40,7 +41,6 @@ function SceneManager(canvas) {
       depth: true,
     });
 
-    const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
     renderer.setPixelRatio(DPR);
     renderer.setSize(width, height);
 
@@ -72,9 +72,13 @@ function SceneManager(canvas) {
 
   function createSceneSubjects(scene, camera) {
     const sceneSubjects = [
-      new Terrain(bufferScene),
+      new Terrain(bufferScene, terrainDimensions),
       new GeneralLights(bufferScene),
-      new Water(scene, camera),
+      new Water(scene, camera, terrainDimensions, {
+        DPR,
+        width: screenDimensions.width,
+        height: screenDimensions.height,
+      }),
       new Rock(bufferScene),
     ];
 
@@ -83,8 +87,8 @@ function SceneManager(canvas) {
 
   function createTarget() {
     const target = new THREE.WebGLRenderTarget(
-        window.innerWidth,
-        window.innerHeight );
+        window.innerWidth * DPR,
+        window.innerHeight * DPR );
 
     target.texture.format = THREE.RGBFormat;
     target.texture.minFilter = THREE.NearestFilter;
@@ -133,6 +137,16 @@ function SceneManager(canvas) {
     renderer.setSize(width, height);
     const dpr = renderer.getPixelRatio();
     target.setSize( width * dpr, height * dpr );
+
+    for (const subject of sceneSubjects) {
+      if (subject.onResize) {
+        subject.onResize({
+          width: width,
+          height: height,
+          DPR: dpr,
+        });
+      }
+    }
   };
 };
 
