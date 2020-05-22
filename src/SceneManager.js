@@ -4,8 +4,6 @@ import Rock from './subjects/Rock';
 import Terrain from './subjects/Terrain';
 import Water from './subjects/Water';
 import {OrbitControls} from './utils/OrbitControls';
-import frag from './shaders/post.frag';
-import vert from './shaders/post.vert';
 
 function SceneManager(canvas) {
   const clock = new THREE.Clock();
@@ -24,7 +22,6 @@ function SceneManager(canvas) {
   const camera = buildCamera(screenDimensions);
   const sceneSubjects = createSceneSubjects(scene, camera);
   const target = createTarget();
-  const {postCamera, postMaterial, postScene} = setupPost(camera);
 
   const controls = new OrbitControls( camera, renderer.domElement );
 
@@ -82,27 +79,6 @@ function SceneManager(canvas) {
     ];
 
     return sceneSubjects;
-  }
-
-  function setupPost(camera) {
-    // Setup post processing stage
-    const cam = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
-    const mat = new THREE.ShaderMaterial( {
-      vertexShader: vert,
-      fragmentShader: frag,
-      uniforms: {
-        cameraNear: {value: camera.near},
-        cameraFar: {value: camera.far},
-        tDiffuse: {value: null},
-        tDepth: {value: null},
-      },
-    } );
-    const postPlane = new THREE.PlaneBufferGeometry( 2, 2 );
-    const postQuad = new THREE.Mesh( postPlane, mat );
-    const scn = new THREE.Scene();
-    scn.add( postQuad );
-
-    return {postCamera: cam, postMaterial: mat, postScene: scn};
   }
 
   function createTarget() {
