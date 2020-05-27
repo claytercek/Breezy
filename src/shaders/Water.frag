@@ -38,20 +38,21 @@ void main() {
 
   float diff =  (worldDepth - screenDepth);
 
-  float wave = sin(vUv.x * 40. + uTime * 3.) / 2. + 0.5;
-  uv += (viewMatrix * vec4(0.0, 0.0, wave / 100., 0.0)).xy * diff / 20.;
+  float wave = sin(vUv.x * 10. + uTime * 2.) / 2. + 0.3;
+  uv += (viewMatrix * vec4(0.0, 0.0, wave / 30., 0.0)).xy * diff / 20.;
   vec4 color = texture2D(tEnv, uv);
 
 
   screenDepth = getScreenDepth(uv);
+  float originalDiff = diff;
   diff =  (worldDepth - screenDepth);
 
   vec4 waterColor = vec4(0.2, 0.9 - diff / 50., 1.0, 1.);
   color = mix(color, waterColor, vec4(0.5 + diff / 200.));
 
-  if (diff < 0.4) {
+  if (originalDiff < 0.6) {
     color = vec4(1);
-  } else if (diff < 0.7) {
+  } else if (originalDiff < 1.0) {
     color = vec4(0.7, 0.95, 1.0, 0.75);
   }
 

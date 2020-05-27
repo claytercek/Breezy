@@ -17,7 +17,7 @@ function SceneManager(canvas) {
 
   const camParams = {
     default: [100, 100, 100],
-    range: [40, 40],
+    range: [60, 60],
     lookat: [20, -2, 15],
   };
 
