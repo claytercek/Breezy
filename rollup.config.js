@@ -40,6 +40,6 @@ export default {
       ]
     }),
     dev && livereload({ watch: 'dist' }),
-    dev && serve({ contentBase: 'dist',  port: 8080 })
+    dev && serve({ contentBase: 'dist',  port: 8080, host: '0.0.0.0' })
   ]
 };

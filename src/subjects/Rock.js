@@ -33,7 +33,7 @@ function Rock(scene, surface) {
   loader.load( 'objects/rock.glb', function( gltf ) {
     const mesh = gltf.scene.children[0];
 
-    mesh.material = new THREE.MeshStandardMaterial({
+    mesh.material = new THREE.MeshPhongMaterial({
       flatShading: true,
       color: 0x9999aa,
     });

@@ -12,7 +12,8 @@ function SceneManager(canvas) {
     width: canvas.width,
     height: canvas.height,
   };
-  const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
+  // const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
+  const DPR = 1;
 
   const terrainDimensions = [200, 200];
 
@@ -22,7 +23,11 @@ function SceneManager(canvas) {
   const renderer = buildRender(screenDimensions);
   const camera = buildCamera(screenDimensions);
   const sceneSubjects = createSceneSubjects(scene, camera);
-  const target = createTarget();
+  const {colorTarget, depthTarget} = createTargets();
+
+  const materialDepth = new THREE.MeshDepthMaterial();
+  materialDepth.depthPacking = THREE.RGBADepthPacking;
+  materialDepth.blending = THREE.NoBlending;
 
   const controls = new OrbitControls( camera, renderer.domElement );
 
@@ -39,13 +44,12 @@ function SceneManager(canvas) {
       antialias: true,
       alpha: true,
       depth: true,
+      stencil: true,
     });
 
     renderer.setPixelRatio(DPR);
     renderer.setSize(width, height);
 
-    // renderer.gammaInput = true;
-    // renderer.gammaOutput = true;
     renderer.shadowMap.enabled = true;
     renderer.autoClear = false;
 
@@ -85,40 +89,51 @@ function SceneManager(canvas) {
     return sceneSubjects;
   }
 
-  function createTarget() {
-    const target = new THREE.WebGLRenderTarget(
+  function createTargets() {
+    const colorTarget = new THREE.WebGLRenderTarget(
         window.innerWidth * DPR,
         window.innerHeight * DPR );
 
-    target.texture.format = THREE.RGBFormat;
-    target.texture.minFilter = THREE.NearestFilter;
-    target.texture.magFilter = THREE.NearestFilter;
-    target.texture.generateMipmaps = false;
-    target.stencilBuffer = false;
-    target.depthBuffer = true;
-    target.depthTexture = new THREE.DepthTexture();
-    target.depthTexture.format = THREE.DepthFormat;
-    target.depthTexture.type = THREE.UnsignedIntType;
+    colorTarget.texture.format = THREE.RGBFormat;
+    colorTarget.texture.minFilter = THREE.NearestFilter;
+    colorTarget.texture.magFilter = THREE.NearestFilter;
+    colorTarget.depthBuffer = true;
 
-    return target;
+    const depthTarget = new THREE.WebGLRenderTarget(
+        window.innerWidth * DPR,
+        window.innerHeight * DPR );
+
+    depthTarget.texture.format = THREE.RGBAFormat;
+    depthTarget.texture.minFilter = THREE.NearestFilter;
+    depthTarget.texture.magFilter = THREE.NearestFilter;
+    depthTarget.depthBuffer = true;
+
+    return {colorTarget, depthTarget};
   }
 
   this.update = function() {
     const elapsedTime = clock.getElapsedTime();
 
     for (let i = 0; i < sceneSubjects.length; i++) {
-      sceneSubjects[i].update(elapsedTime, target);
+      sceneSubjects[i].update(elapsedTime, colorTarget, depthTarget);
     }
 
     controls.update();
 
     renderer.clear();
 
+
+    renderer.setRenderTarget( colorTarget );
+    renderer.render(bufferScene, camera);
+
+
     // render buffer scene for water depth texture
-    renderer.setRenderTarget( target );
+    bufferScene.overrideMaterial = materialDepth;
+    renderer.setRenderTarget( depthTarget );
     renderer.render(bufferScene, camera);
 
     renderer.setRenderTarget( null );
+    bufferScene.overrideMaterial = null;
 
     // render buffer scene and then render water on top
     renderer.render( bufferScene, camera );
@@ -135,8 +150,10 @@ function SceneManager(canvas) {
     camera.updateProjectionMatrix();
 
     renderer.setSize(width, height);
-    const dpr = renderer.getPixelRatio();
-    target.setSize( width * dpr, height * dpr );
+    // const dpr = renderer.getPixelRatio();
+    const dpr = 1;
+    depthTarget.setSize( width * dpr, height * dpr );
+    colorTarget.setSize( width * dpr, height * dpr );
 
     for (const subject of sceneSubjects) {
       if (subject.onResize) {

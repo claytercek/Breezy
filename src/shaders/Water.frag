@@ -1,3 +1,4 @@
+
 #include <packing>
 
 varying vec4 WorldPosition;
@@ -13,35 +14,36 @@ uniform float cameraFar;
 
 float linearizeDepth(float z) {
   float viewZ = perspectiveDepthToViewZ( z, cameraNear, cameraFar );
+  // return viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );
   return viewZ;
 }
 
-float getLinearScreenDepth(vec2 uv) {
-  return  linearizeDepth(texture2D(tDepth, uv).r);
+
+float getScreenDepth(vec2 uv) {
+  float depth = unpackRGBAToDepth(texture2D(tDepth, uv));
+  return linearizeDepth(depth);
 }
  
 float getLinearDepth(vec3 pos) {
-    return  (viewMatrix * vec4(pos, 1.0)).z;
-    // return gl_FragCoord.z;
-}
- 
-float getLinearScreenDepth() {
-    vec2 uv = gl_FragCoord.xy / screenSize;
-    return getLinearScreenDepth(uv);
+    float viewZ = (viewMatrix * vec4(pos, 1.0)).z;
+    return viewZ;
 }
 
 void main() {
+  vec2 uv = gl_FragCoord.xy / screenSize;
   float worldDepth = getLinearDepth(WorldPosition.xyz);
-  float screenDepth = getLinearScreenDepth();
+  float screenDepth = getScreenDepth(uv);
+
+  // vec4 color = vec4(vec3(worldDepth), 1.);
 
   float diff =  (worldDepth - screenDepth);
 
-  vec2 uv = gl_FragCoord.xy / screenSize;
   float wave = sin(vUv.x * 40. + uTime * 3.) / 2. + 0.5;
   uv += (viewMatrix * vec4(0.0, 0.0, wave / 100., 0.0)).xy * diff / 20.;
   vec4 color = texture2D(tEnv, uv);
 
-  screenDepth = getLinearScreenDepth(uv);
+
+  screenDepth = getScreenDepth(uv);
   diff =  (worldDepth - screenDepth);
 
   vec4 waterColor = vec4(0.2, 0.9 - diff / 50., 1.0, 1.);

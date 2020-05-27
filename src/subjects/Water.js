@@ -4,9 +4,6 @@ import vert from '../shaders/Water.vert';
 
 
 function Water(scene, camera, terrainDimensions, screenDimensions) {
-  const n = camera.near;
-  const f = camera.far;
-
   const material = new THREE.ShaderMaterial( {
     uniforms: {
       tDepth: {value: null},
@@ -37,9 +34,9 @@ function Water(scene, camera, terrainDimensions, screenDimensions) {
 
   scene.add(mesh);
 
-  this.update = function(time, target) {
-    material.uniforms.tDepth.value = target.depthTexture;
-    material.uniforms.tEnv.value = target.texture;
+  this.update = function(time, colorTarget, depthTarget) {
+    material.uniforms.tDepth.value = depthTarget.texture;
+    material.uniforms.tEnv.value = colorTarget.texture;
     material.uniforms.uTime.value = time;
   };
 
