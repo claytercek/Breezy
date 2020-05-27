@@ -12,7 +12,7 @@ function Terrain(scene, terrainDimensions) {
 
 
   const mesh = new THREE.Mesh(
-      new THREE.PlaneBufferGeometry(terrainDimensions[0], terrainDimensions[1], 64, 64),
+      new THREE.PlaneBufferGeometry(terrainDimensions[0], terrainDimensions[1], 100, 100),
       [
         new THREE.ShaderMaterial({
           transparent: true,
@@ -31,6 +31,7 @@ function Terrain(scene, terrainDimensions) {
   mesh.geometry.addGroup( 0, Infinity, 0 );
   mesh.geometry.addGroup( 0, Infinity, 1 );
 
+  mesh.position.set(-70, 6, -30);
 
   const peak = 1;
   const smoothing = 8000 / terrainDimensions[1];

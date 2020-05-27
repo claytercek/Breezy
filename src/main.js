@@ -9,6 +9,12 @@ render();
 
 function bindEventListeners() {
   window.onresize = resizeCanvas;
+  document.addEventListener('touchmove', (e) => {
+    sceneManager.onDocumentMouseMove(e.touches[0]);
+  });
+  document.addEventListener('mousemove', (e) => {
+    sceneManager.onDocumentMouseMove(e);
+  });
   resizeCanvas();
 }
 

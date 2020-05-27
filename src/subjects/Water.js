@@ -25,10 +25,10 @@ function Water(scene, camera, terrainDimensions, screenDimensions) {
   });
 
   const mesh = new THREE.Mesh(
-      new THREE.PlaneBufferGeometry(terrainDimensions[0], terrainDimensions[1], 64, 64), material);
+      new THREE.PlaneBufferGeometry(terrainDimensions[0], terrainDimensions[1], 100, 100), material);
 
   mesh.rotateX(Math.PI / -2);
-  mesh.position.set(0, 0, 0);
+  mesh.position.set(-20, 0, 0);
   mesh.castShadow = true;
   mesh.receiveShadow = true;
 

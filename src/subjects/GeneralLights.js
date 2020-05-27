@@ -7,8 +7,8 @@ function GeneralLights(scene) {
   hemiLight.position.set( 0, 50, 0 );
   scene.add( hemiLight );
 
-  const hemiLightHelper = new THREE.HemisphereLightHelper( hemiLight, 10 );
-  scene.add( hemiLightHelper );
+  // const hemiLightHelper = new THREE.HemisphereLightHelper( hemiLight, 10 );
+  // scene.add( hemiLightHelper );
 
   const dirLight = new THREE.DirectionalLight( 0xffffff, 0.6 );
   dirLight.color.setHSL( 0.1, 0.0, 1 );
@@ -31,8 +31,8 @@ function GeneralLights(scene) {
   dirLight.shadow.camera.far = 400;
   dirLight.shadow.bias = 0.001;
 
-  const dirLightHeper = new THREE.DirectionalLightHelper( dirLight, 10 );
-  scene.add( dirLightHeper );
+  // const dirLightHeper = new THREE.DirectionalLightHelper( dirLight, 10 );
+  // scene.add( dirLightHeper );
 
   this.update = function(time) {
   };

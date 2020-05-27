@@ -3,7 +3,6 @@ import GeneralLights from './subjects/GeneralLights';
 import Rock from './subjects/Rock';
 import Terrain from './subjects/Terrain';
 import Water from './subjects/Water';
-import {OrbitControls} from './utils/OrbitControls';
 
 function SceneManager(canvas) {
   const clock = new THREE.Clock();
@@ -12,10 +11,17 @@ function SceneManager(canvas) {
     width: canvas.width,
     height: canvas.height,
   };
+
   // const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
   const DPR = 1;
 
-  const terrainDimensions = [200, 200];
+  const camParams = {
+    default: [100, 100, 100],
+    range: [40, 40],
+    lookat: [20, -2, 15],
+  };
+
+  const terrainDimensions = [320, 250];
 
   const scene = buildScene();
   const bufferScene = buildScene();
@@ -25,11 +31,13 @@ function SceneManager(canvas) {
   const sceneSubjects = createSceneSubjects(scene, camera);
   const {colorTarget, depthTarget} = createTargets();
 
+  let mouseX = camParams.default[0];
+  let mouseY = camParams.default[1];
+
   const materialDepth = new THREE.MeshDepthMaterial();
   materialDepth.depthPacking = THREE.RGBADepthPacking;
   materialDepth.blending = THREE.NoBlending;
 
-  const controls = new OrbitControls( camera, renderer.domElement );
 
   function buildScene() {
     const scene = new THREE.Scene();
@@ -44,7 +52,8 @@ function SceneManager(canvas) {
       antialias: true,
       alpha: true,
       depth: true,
-      stencil: true,
+      stencil: false,
+      // precision: 'mediump',
     });
 
     renderer.setPixelRatio(DPR);
@@ -68,8 +77,8 @@ function SceneManager(canvas) {
         farPlane);
 
 
-    camera.position.set(0, 20, 20);
-    camera.lookAt(new THREE.Vector3(0, 0, 0));
+    camera.position.set(camParams.default[0], camParams.default[1], camParams.default[2]);
+    camera.lookAt(new THREE.Vector3(camParams.lookat[0], camParams.lookat[1], camParams.lookat[2]));
 
     return camera;
   }
@@ -98,6 +107,7 @@ function SceneManager(canvas) {
     colorTarget.texture.minFilter = THREE.NearestFilter;
     colorTarget.texture.magFilter = THREE.NearestFilter;
     colorTarget.depthBuffer = true;
+    colorTarget.stencilBuffer = false;
 
     const depthTarget = new THREE.WebGLRenderTarget(
         window.innerWidth * DPR,
@@ -107,6 +117,7 @@ function SceneManager(canvas) {
     depthTarget.texture.minFilter = THREE.NearestFilter;
     depthTarget.texture.magFilter = THREE.NearestFilter;
     depthTarget.depthBuffer = true;
+    depthTarget.stencilBuffer = false;
 
     return {colorTarget, depthTarget};
   }
@@ -118,10 +129,13 @@ function SceneManager(canvas) {
       sceneSubjects[i].update(elapsedTime, colorTarget, depthTarget);
     }
 
-    controls.update();
+
+    camera.position.x += ( mouseX - camera.position.x ) * .05;
+    camera.position.y += ( mouseY - camera.position.y ) * .05;
+
+    camera.lookAt( camParams.lookat[0], camParams.lookat[1], camParams.lookat[2] );
 
     renderer.clear();
-
 
     renderer.setRenderTarget( colorTarget );
     renderer.render(bufferScene, camera);
@@ -147,6 +161,7 @@ function SceneManager(canvas) {
     screenDimensions.height = height;
 
     camera.aspect = width / height;
+    camera.fov = Math.min(4 * height / Math.pow(width, 0.7), 40);
     camera.updateProjectionMatrix();
 
     renderer.setSize(width, height);
@@ -164,6 +179,13 @@ function SceneManager(canvas) {
         });
       }
     }
+  };
+
+  this.onDocumentMouseMove = function( event ) {
+    const {width, height} = canvas;
+
+    mouseX = camParams.default[0] - camParams.range[0] / 2 + (event.clientX / width * camParams.range[0]);
+    mouseY = camParams.default[1] + camParams.range[1] / 2 - (event.clientY / height * camParams.range[1]);
   };
 };
 
