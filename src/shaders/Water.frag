@@ -30,24 +30,23 @@ float getLinearDepth(vec3 pos) {
 }
 
 void main() {
-  vec2 uv = gl_FragCoord.xy / screenSize;
+  vec2 uv = gl_FragCoord.xy;
+
+  float wave = sin(vUv.x * 30. + uTime * 2.) / 2. + 0.3;
+  uv -= (viewMatrix * vec4(0.0, 0.0, wave  * 20., 0.0)).xy;
+
+  vec4 color = texture2D(tEnv, uv / screenSize);
+
+
+  
   float worldDepth = getLinearDepth(WorldPosition.xyz);
-  float screenDepth = getScreenDepth(uv);
+  float screenDepth = getScreenDepth(gl_FragCoord.xy / screenSize);
+  float offsetScreenDepth = getScreenDepth(uv / screenSize);
 
-  // vec4 color = vec4(vec3(worldDepth), 1.);
+  float originalDiff = (worldDepth - screenDepth);
+  float diff = (worldDepth - offsetScreenDepth);
 
-  float diff =  (worldDepth - screenDepth);
-
-  float wave = sin(vUv.x * 10. + uTime * 2.) / 2. + 0.3;
-  uv += (viewMatrix * vec4(0.0, 0.0, wave / 30., 0.0)).xy * diff / 20.;
-  vec4 color = texture2D(tEnv, uv);
-
-
-  screenDepth = getScreenDepth(uv);
-  float originalDiff = diff;
-  diff =  (worldDepth - screenDepth);
-
-  vec4 waterColor = vec4(0.2, 0.9 - diff / 50., 1.0, 1.);
+  vec4 waterColor = vec4(0.2, max(0.9 - diff / 100., 0.6), 1.0, 1.);
   color = mix(color, waterColor, vec4(0.5 + diff / 200.));
 
   if (originalDiff < 0.6) {

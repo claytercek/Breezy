@@ -3,6 +3,8 @@ import GeneralLights from './subjects/GeneralLights';
 import Rock from './subjects/Rock';
 import Terrain from './subjects/Terrain';
 import Water from './subjects/Water';
+import Fish from './subjects/Fish';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
 function SceneManager(canvas) {
   const clock = new THREE.Clock();
@@ -30,6 +32,10 @@ function SceneManager(canvas) {
   const camera = buildCamera(screenDimensions);
   const sceneSubjects = createSceneSubjects(scene, camera);
   const {colorTarget, depthTarget} = createTargets();
+
+  const cam2 = buildCamera(screenDimensions);
+  const controls = new OrbitControls( cam2, renderer.domElement );
+  controls.update();
 
   let mouseX = camParams.default[0];
   let mouseY = camParams.default[1];
@@ -93,6 +99,7 @@ function SceneManager(canvas) {
         height: screenDimensions.height,
       }),
       new Rock(bufferScene),
+      new Fish(bufferScene),
     ];
 
     return sceneSubjects;
@@ -125,10 +132,7 @@ function SceneManager(canvas) {
   this.update = function() {
     const elapsedTime = clock.getElapsedTime();
 
-    for (let i = 0; i < sceneSubjects.length; i++) {
-      sceneSubjects[i].update(elapsedTime, colorTarget, depthTarget);
-    }
-
+    controls.update();
 
     camera.position.x += ( mouseX - camera.position.x ) * .05;
     camera.position.y += ( mouseY - camera.position.y ) * .05;
@@ -137,21 +141,25 @@ function SceneManager(canvas) {
 
     renderer.clear();
 
+    for (let i = 0; i < sceneSubjects.length; i++) {
+      sceneSubjects[i].update(elapsedTime, colorTarget, depthTarget);
+    }
+
     renderer.setRenderTarget( colorTarget );
-    renderer.render(bufferScene, camera);
+    renderer.render(bufferScene, cam2);
 
 
     // render buffer scene for water depth texture
     bufferScene.overrideMaterial = materialDepth;
     renderer.setRenderTarget( depthTarget );
-    renderer.render(bufferScene, camera);
+    renderer.render(bufferScene, cam2);
 
     renderer.setRenderTarget( null );
     bufferScene.overrideMaterial = null;
 
     // render buffer scene and then render water on top
-    renderer.render( bufferScene, camera );
-    renderer.render( scene, camera );
+    renderer.render( bufferScene, cam2 );
+    renderer.render( scene, cam2 );
   };
 
   this.onWindowResize = function() {
@@ -160,9 +168,9 @@ function SceneManager(canvas) {
     screenDimensions.width = width;
     screenDimensions.height = height;
 
-    camera.aspect = width / height;
-    camera.fov = Math.min(4 * height / Math.pow(width, 0.7), 40);
-    camera.updateProjectionMatrix();
+    cam2.aspect = width / height;
+    cam2.fov = Math.min(4 * height / Math.pow(width, 0.7), 40);
+    cam2.updateProjectionMatrix();
 
     renderer.setSize(width, height);
     // const dpr = renderer.getPixelRatio();
