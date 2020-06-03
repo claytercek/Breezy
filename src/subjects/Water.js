@@ -28,7 +28,7 @@ function Water(scene, camera, terrainDimensions, screenDimensions) {
       new THREE.PlaneBufferGeometry(terrainDimensions[0], terrainDimensions[1], 100, 100), material);
 
   mesh.rotateX(Math.PI / -2);
-  mesh.position.set(-20, 0, 0);
+  mesh.position.set(-70, 0, 0);
   mesh.castShadow = true;
   mesh.receiveShadow = true;
 

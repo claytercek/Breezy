@@ -21,7 +21,7 @@ function GeneralLights(scene) {
   dirLight.shadow.mapSize.height = 4096;
   dirLight.shadow.radius = 12.0;
 
-  const d = 50;
+  const d = 90;
 
   dirLight.shadow.camera.left = - d;
   dirLight.shadow.camera.right = d;

@@ -3,6 +3,7 @@ import GeneralLights from './subjects/GeneralLights';
 import Rock from './subjects/Rock';
 import Terrain from './subjects/Terrain';
 import Water from './subjects/Water';
+import Fish from './subjects/Fish';
 
 function SceneManager(canvas) {
   const clock = new THREE.Clock();
@@ -93,6 +94,7 @@ function SceneManager(canvas) {
         height: screenDimensions.height,
       }),
       new Rock(bufferScene),
+      new Fish(bufferScene),
     ];
 
     return sceneSubjects;
@@ -125,10 +127,6 @@ function SceneManager(canvas) {
   this.update = function() {
     const elapsedTime = clock.getElapsedTime();
 
-    for (let i = 0; i < sceneSubjects.length; i++) {
-      sceneSubjects[i].update(elapsedTime, colorTarget, depthTarget);
-    }
-
 
     camera.position.x += ( mouseX - camera.position.x ) * .05;
     camera.position.y += ( mouseY - camera.position.y ) * .05;
@@ -136,6 +134,10 @@ function SceneManager(canvas) {
     camera.lookAt( camParams.lookat[0], camParams.lookat[1], camParams.lookat[2] );
 
     renderer.clear();
+
+    for (let i = 0; i < sceneSubjects.length; i++) {
+      sceneSubjects[i].update(elapsedTime, colorTarget, depthTarget);
+    }
 
     renderer.setRenderTarget( colorTarget );
     renderer.render(bufferScene, camera);

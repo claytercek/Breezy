@@ -33,8 +33,8 @@ function Terrain(scene, terrainDimensions) {
 
   mesh.position.set(-70, 6, -30);
 
-  const peak = 1;
-  const smoothing = 8000 / terrainDimensions[1];
+  const peak = 1.5;
+  const smoothing = 12000 / terrainDimensions[1];
   const vertices = mesh.geometry.attributes.position.array;
 
   const simplex = new SimplexNoise('2');
