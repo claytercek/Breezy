@@ -32,10 +32,6 @@ function SceneManager(canvas) {
   const sceneSubjects = createSceneSubjects(scene, camera);
   const {colorTarget, depthTarget} = createTargets();
 
-  const cam2 = buildCamera(screenDimensions);
-  const controls = new OrbitControls( cam2, renderer.domElement );
-  controls.update();
-
   let mouseX = camParams.default[0];
   let mouseY = camParams.default[1];
 
@@ -144,20 +140,20 @@ function SceneManager(canvas) {
     }
 
     renderer.setRenderTarget( colorTarget );
-    renderer.render(bufferScene, cam2);
+    renderer.render(bufferScene, camera);
 
 
     // render buffer scene for water depth texture
     bufferScene.overrideMaterial = materialDepth;
     renderer.setRenderTarget( depthTarget );
-    renderer.render(bufferScene, cam2);
+    renderer.render(bufferScene, camera);
 
     renderer.setRenderTarget( null );
     bufferScene.overrideMaterial = null;
 
     // render buffer scene and then render water on top
-    renderer.render( bufferScene, cam2 );
-    renderer.render( scene, cam2 );
+    renderer.render( bufferScene, camera );
+    renderer.render( scene, camera );
   };
 
   this.onWindowResize = function() {
@@ -166,9 +162,9 @@ function SceneManager(canvas) {
     screenDimensions.width = width;
     screenDimensions.height = height;
 
-    cam2.aspect = width / height;
-    cam2.fov = Math.min(4 * height / Math.pow(width, 0.7), 40);
-    cam2.updateProjectionMatrix();
+    camera.aspect = width / height;
+    camera.fov = Math.min(4 * height / Math.pow(width, 0.7), 40);
+    camera.updateProjectionMatrix();
 
     renderer.setSize(width, height);
     // const dpr = renderer.getPixelRatio();
