@@ -25,7 +25,8 @@ function Rock(scene, surface) {
         position[2]);
 
     scene.add(newMesh);
-
+    newMesh.matrixAutoUpdate = false;
+    newMesh.updateMatrix();
     meshes.push(newMesh);
   }
 

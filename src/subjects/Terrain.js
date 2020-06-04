@@ -12,7 +12,7 @@ function Terrain(scene, terrainDimensions) {
 
 
   const mesh = new THREE.Mesh(
-      new THREE.PlaneBufferGeometry(terrainDimensions[0], terrainDimensions[1], 100, 100),
+      new THREE.PlaneBufferGeometry(terrainDimensions[0], terrainDimensions[1], 60, 60),
       [
         new THREE.ShaderMaterial({
           transparent: true,
@@ -49,8 +49,11 @@ function Terrain(scene, terrainDimensions) {
 
   mesh.rotation.x = -Math.PI / 2.3;
 
-  mesh.castShadow = true;
+  // mesh.castShadow = true;
   mesh.receiveShadow = true;
+
+  mesh.matrixAutoUpdate = false;
+  mesh.updateMatrix();
 
   scene.add(mesh);
 

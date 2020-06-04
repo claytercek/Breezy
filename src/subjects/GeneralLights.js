@@ -17,8 +17,8 @@ function GeneralLights(scene) {
   scene.add( dirLight );
 
   dirLight.castShadow = true;
-  dirLight.shadow.mapSize.width = 4096;
-  dirLight.shadow.mapSize.height = 4096;
+  dirLight.shadow.mapSize.width = 1024;
+  dirLight.shadow.mapSize.height = 1024;
   dirLight.shadow.radius = 12.0;
 
   const d = 90;

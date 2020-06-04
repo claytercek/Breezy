@@ -13,7 +13,7 @@ function SceneManager(canvas) {
     height: canvas.height,
   };
 
-  const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
+  const DPR = (window.devicePixelRatio) ? Math.min(window.devicePixelRatio, 2) : 1;
   // const DPR = 1;
 
   const camParams = {
@@ -50,7 +50,7 @@ function SceneManager(canvas) {
   function buildRender({width, height}) {
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
-      antialias: true,
+      antialias: false,
       alpha: true,
       depth: true,
       stencil: false,
@@ -169,7 +169,7 @@ function SceneManager(canvas) {
     camera.updateProjectionMatrix();
 
     renderer.setSize(width, height);
-    const dpr = renderer.getPixelRatio();
+    const dpr = Math.min(renderer.getPixelRatio(), 2);
     // const dpr = 1;
     depthTarget.setSize( width * dpr, height * dpr );
     colorTarget.setSize( width * dpr, height * dpr );
