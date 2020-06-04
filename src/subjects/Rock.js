@@ -30,7 +30,7 @@ function Rock(scene, surface) {
   }
 
   const loader = new GLTFLoader();
-  loader.load( 'objects/rock.glb', function( gltf ) {
+  loader.load( 'objects/rock_03.glb', function( gltf ) {
     const mesh = gltf.scene.children[0];
 
     mesh.material = new THREE.MeshPhongMaterial({
