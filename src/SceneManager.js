@@ -13,8 +13,8 @@ function SceneManager(canvas) {
     height: canvas.height,
   };
 
-  // const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
-  const DPR = 1;
+  const DPR = (window.devicePixelRatio) ? window.devicePixelRatio : 1;
+  // const DPR = 1;
 
   const camParams = {
     default: [100, 100, 100],
@@ -169,8 +169,8 @@ function SceneManager(canvas) {
     camera.updateProjectionMatrix();
 
     renderer.setSize(width, height);
-    // const dpr = renderer.getPixelRatio();
-    const dpr = 1;
+    const dpr = renderer.getPixelRatio();
+    // const dpr = 1;
     depthTarget.setSize( width * dpr, height * dpr );
     colorTarget.setSize( width * dpr, height * dpr );
 
