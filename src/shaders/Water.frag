@@ -32,8 +32,8 @@ float getLinearDepth(vec3 pos) {
 void main() {
   vec2 uv = gl_FragCoord.xy;
 
-  float wave = sin(vUv.x * 30. + uTime * 2.) / 2. + 0.3;
-  uv -= (viewMatrix * vec4(0.0, 0.0, wave  * 20., 0.0)).xy;
+  float wave = sin(vUv.x * 50. + uTime * 2.) / 2. + 0.3;
+  uv -= (viewMatrix * vec4(0.0, 0.0, wave  * 10., 0.0)).xy;
 
   vec4 color = texture2D(tEnv, uv / screenSize);
 

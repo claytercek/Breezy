@@ -34,10 +34,10 @@ function Water(scene, camera, terrainDimensions, screenDimensions) {
 
   scene.add(mesh);
 
-  this.update = function(time, colorTarget, depthTarget) {
+  this.update = function(deltaTime, colorTarget, depthTarget) {
     material.uniforms.tDepth.value = depthTarget.texture;
     material.uniforms.tEnv.value = colorTarget.texture;
-    material.uniforms.uTime.value = time;
+    material.uniforms.uTime.value += deltaTime;
   };
 
   this.onResize = function(screenDimensions) {

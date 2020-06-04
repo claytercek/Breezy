@@ -35,7 +35,7 @@ function SceneManager(canvas) {
   let mouseX = camParams.default[0];
   let mouseY = camParams.default[1];
 
-  const materialDepth = new THREE.MeshDepthMaterial();
+  const materialDepth = new THREE.MeshDepthMaterial({morphTargets: true});
   materialDepth.depthPacking = THREE.RGBADepthPacking;
   materialDepth.blending = THREE.NoBlending;
 
@@ -86,8 +86,8 @@ function SceneManager(canvas) {
 
   function createSceneSubjects(scene, camera) {
     const sceneSubjects = [
-      new Terrain(bufferScene, terrainDimensions),
       new GeneralLights(bufferScene),
+      new Terrain(bufferScene, terrainDimensions),
       new Water(scene, camera, terrainDimensions, {
         DPR,
         width: screenDimensions.width,
@@ -125,7 +125,8 @@ function SceneManager(canvas) {
   }
 
   this.update = function() {
-    const elapsedTime = clock.getElapsedTime();
+    // const elapsedTime = clock.getElapsedTime();
+    const deltaTime = clock.getDelta();
 
 
     camera.position.x += ( mouseX - camera.position.x ) * .05;
@@ -136,7 +137,7 @@ function SceneManager(canvas) {
     renderer.clear();
 
     for (let i = 0; i < sceneSubjects.length; i++) {
-      sceneSubjects[i].update(elapsedTime, colorTarget, depthTarget);
+      sceneSubjects[i].update(deltaTime, colorTarget, depthTarget);
     }
 
     renderer.setRenderTarget( colorTarget );
