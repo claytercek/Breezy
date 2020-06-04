@@ -8,15 +8,16 @@ function Fish(scene) {
   const loader = new GLTFLoader( );
 
 
+  const materialObj = new THREE.MeshBasicMaterial( {
+    color: '#000000',
+    morphTargets: true,
+  });
+
   loader.load( 'objects/fish_10.glb', function( gltf ) {
     gltf.scene.scale.set(8, 8, 8);
     const clip = gltf.animations[0];
     const mesh = gltf.scene;
-    console.log(mesh.children[0].material);
-    const materialObj = new THREE.MeshBasicMaterial( {
-      color: '#000000',
-      morphTargets: true,
-    });
+
     mesh.traverse(function(child) {
       if (child instanceof THREE.Mesh) {
         child.material = materialObj;
@@ -25,12 +26,28 @@ function Fish(scene) {
       }
     });
 
-    mesh.material = materialObj;
 
     addMorph(mesh, clip, 0, 16, -3, 12);
     addMorph(mesh, clip, 1.2, 13, -3, 8);
     addMorph(mesh, clip, 5, 12, -3, 10);
     addMorph(mesh, clip, 6, 12, -3, 7);
+  } );
+
+
+  loader.load( 'objects/fish_11.glb', function( gltf ) {
+    gltf.scene.scale.set(8, 8, 8);
+    const clip = gltf.animations[0];
+    const mesh = gltf.scene;
+
+    mesh.traverse(function(child) {
+      if (child instanceof THREE.Mesh) {
+        child.material = materialObj;
+        child.receiveShadow = true;
+        child.castShadow = true;
+      }
+    });
+
+    addMorph(mesh, clip, 0.8, 12, -3, 15);
   } );
 
 

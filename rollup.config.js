@@ -34,12 +34,12 @@ export default {
     !dev && terser({
       module: true
     }),
+    dev && livereload({ watch: ['dist', 'static'] }),
     copy({
       targets: [
         { src: 'static/**/*', dest: 'dist' },
       ]
     }),
-    dev && livereload({ watch: 'dist' }),
     dev && serve({ contentBase: 'dist',  port: 8080, host: '0.0.0.0' })
   ]
 };
