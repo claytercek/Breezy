@@ -61,6 +61,7 @@ function SceneManager(canvas) {
     renderer.setSize(width, height);
 
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.autoClear = false;
 
     return renderer;

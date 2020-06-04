@@ -36,6 +36,7 @@ function Rock(scene, surface) {
     mesh.material = new THREE.MeshPhongMaterial({
       flatShading: true,
       color: 0x9999aa,
+      shininess: 0,
     });
 
     mesh.castShadow = true;

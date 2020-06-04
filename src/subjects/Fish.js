@@ -47,7 +47,7 @@ function Fish(scene) {
       }
     });
 
-    addMorph(mesh, clip, 0.8, 12, -3, 15);
+    addMorph(mesh, clip, 0.8, 12, -2, 15);
   } );
 
 
